@@ -1,0 +1,34 @@
+package net.spantree.examples.drools.petstore
+
+import org.slf4j.Logger
+import net.spantree.examples.drools.petstore.*
+
+global Logger log
+
+rule "should calculate discount amount from percentage of item price"
+    when
+        $discount: OrderDiscount(
+            percentage != null,
+            amount == null
+        )
+    then
+        Double amount = 0D;
+        for(OrderItem item : $discount.getItems()) {
+            amount += item.getProduct().getPrice() * $discount.getPercentage();
+        }
+        $discount.setAmount(amount);
+        update($discount);
+end
+
+rule "should apply discounts to order"
+    when
+        $order: Order($currentDiscountAmount: discountAmount)
+        $amount: Double(doubleValue != $currentDiscountAmount) from accumulate(
+            $d: OrderDiscount(order: order, amount != null),
+            sum($d.getAmount())
+        )
+    then
+        $order.setDiscountAmount($amount);
+        update($order);
+end
+

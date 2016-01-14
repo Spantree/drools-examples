@@ -1,0 +1,49 @@
+package net.spantree.examples.drools.petstore
+
+import org.slf4j.Logger
+import net.spantree.examples.drools.petstore.*
+
+global Logger log
+
+rule "buy two fish get one fish free"
+    when
+        $order: Order()
+        Number(intValue > 2) from accumulate(
+            $item: OrderItem(order == $order, product.getType() == ProductType.FISH),
+            sum($item.getQuantity())
+        )
+        $cheapestFish: OrderItem(product.getType() == ProductType.FISH)
+        not OrderItem(product.type == ProductType.FISH, product.price < $cheapestFish.product.price)
+        not OrderDiscount(order == $order, items contains $cheapestFish)
+    then
+        OrderDiscount discount = new OrderDiscount($order, $cheapestFish, 1.0D, "buy two fish get one fish free");
+        insert(discount);
+end
+
+rule "buy ten fish get a tank half off"
+    when
+        $order: Order()
+        Number(intValue >= 10) from accumulate(
+            $item: OrderItem(order == $order, product.type == ProductType.FISH),
+            sum($item.getQuantity())
+        )
+        $tankItem: OrderItem(order == $order, product.type == ProductType.FISH_TANK)
+        not OrderDiscount(order == $order, items contains $tankItem)
+    then
+        OrderDiscount discount = new OrderDiscount($order, $tankItem, 0.5D, "buy ten fish get a tank half off");
+        insert(discount);
+end
+
+rule "warn if purchasing freshwater and saltwater fish"
+    when
+        $saltwaterFish: Fish(fishType == FishType.SALTWATER)
+        $freshwaterFish: Fish(fishType == FishType.FRESHWATER)
+        $order: Order(notes not contains OrderNote.INCOMPATIBLE_FISH)
+        exists OrderItem(order == $order, product == $saltwaterFish)
+        exists OrderItem(order == $order, product == $freshwaterFish)
+    then
+        $order.addNote(OrderNote.INCOMPATIBLE_FISH);
+        update($order);
+end
+
+

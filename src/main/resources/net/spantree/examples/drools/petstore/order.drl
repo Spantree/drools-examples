@@ -1,0 +1,50 @@
+package net.spantree.examples.drools.petstore
+
+import org.slf4j.Logger
+import net.spantree.examples.drools.petstore.*
+
+global Logger log
+
+rule "should associate order item with order"
+    when
+        $item: OrderItem($order: order, order.items not contains this)
+    then
+        $order.addItem($item);
+        update($order);
+end
+
+rule "should associate discount with order"
+    when
+        $discount: OrderDiscount($order: order, order.items not contains this)
+    then
+        log.info("Adding discount to order {}", $discount);
+        $order.addDiscount($discount);
+        update($order);
+end
+
+rule "orders should calculate subtotal"
+    when
+        $order: Order($currentSubtotal: subtotal)
+        $subtotal: Double(doubleValue != $currentSubtotal) from accumulate(
+            OrderItem($p: product, $q: quantity),
+            sum($p.getPrice() * $q)
+        )
+    then
+        $order.setSubtotal($subtotal);
+        update($order);
+end
+
+rule "orders should calculate total"
+    salience 1
+    when
+        $order: Order(
+            total != subtotal - discountAmount + stateSalesTax + localSalesTax,
+            $subtotal: subtotal,
+            $discountAmount: discountAmount,
+            $stateSalesTax: stateSalesTax,
+            $localSalesTax: localSalesTax
+        )
+    then
+        $order.setTotal($subtotal - $discountAmount + $stateSalesTax + $localSalesTax);
+        update($order);
+end

@@ -1,0 +1,9 @@
+.classpath
+.project
+drools-examples.iml
+.gradle
+.idea
+.metadata
+bin
+build
+.settings

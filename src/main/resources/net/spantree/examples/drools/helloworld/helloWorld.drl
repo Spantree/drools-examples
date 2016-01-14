@@ -1,0 +1,40 @@
+package net.spantree.examples.drools.helloworld
+
+import org.slf4j.Logger
+import net.spantree.examples.drools.helloworld.*
+
+global Logger log;
+
+rule "Say Hello"
+    when
+        $m: Message(status == MessageStatus.HELLO, $currentMsg: message)
+    then
+        System.out.println($currentMsg);
+        log.info(
+            "Rule: '{}', message: '{}'",
+            drools.getRule().getName(),
+            $currentMsg
+        );
+        log.info(
+            "Rule: '{}', changing status to {}",
+            drools.getRule().getName(),
+            MessageStatus.GOODBYE
+        );
+        $m.setStatus(MessageStatus.GOODBYE);
+
+        update($m);
+end
+
+rule "Say Goodbye"
+    when
+        $m: Message(status == MessageStatus.GOODBYE, $currentMsg: message)
+    then
+        $m.setMessage("Goodbye cruel world");
+        log.info(
+            "Rule: '{}', original message: '{}', new message: {}",
+            drools.getRule().getName(),
+            $currentMsg,
+            $m.getMessage()
+        );
+        System.out.println($m.getMessage());
+end

@@ -1,0 +1,32 @@
+package net.spantree.examples.drools.petstore
+
+import org.slf4j.Logger
+import net.spantree.examples.drools.petstore.*
+
+global Logger log
+
+rule "warn to get cat food with purchase of new cat"
+    when
+        $order: Order($orderId: id)
+        OrderItem(order == $order, product.type == ProductType.CAT)
+        not OrderItem(order == $order, product.type == ProductType.CAT_FOOD)
+    then
+        $order.addNote(OrderNote.BUY_CAT_FOOD);
+        update($order);
+end
+
+rule "add free bag of dog food with purchase of new dog"
+    when
+    	$sample: Product(id == "buff_lamb_rice")
+        $order: Order()
+        OrderItem(order == $order, product.type == ProductType.DOG)
+        not OrderItem(order == $order, product.type == ProductType.DOG_FOOD)
+    then
+		OrderItem freeItem = new OrderItem($order, $sample, 1);
+		insert(freeItem);
+
+		OrderDiscount discount = new OrderDiscount($order, freeItem, 1.0, drools.getRule().getName());
+		log.info("Adding new discount {}", discount);
+		insert(discount);
+end
+

@@ -1,0 +1,71 @@
+package net.spantree.examples.drools.petstore
+
+import org.slf4j.Logger
+import net.spantree.examples.drools.petstore.*
+
+global Logger log
+
+rule "set taxable amount"
+    when
+        $order: Order(
+            taxableAmount != subtotal - discountAmount,
+            $subtotal: subtotal,
+            $discountAmount: discountAmount
+        )
+    then
+        $order.setTaxableAmount($subtotal - $discountAmount);
+        update($order);
+end
+
+rule "add state sales tax"
+    no-loop
+    when
+        $order: Order(
+            $state: customerState,
+            $orderDate: date,
+            $taxableAmount: taxableAmount,
+            $currentTaxAmount: stateSalesTax
+        )
+        $tax: StateTaxRate(
+            state == $state,
+            dateActive.compareTo($orderDate) <= 0,
+            rate != ($currentTaxAmount / $taxableAmount),
+            $rate: rate
+        )
+        not StateTaxRate(
+            state == $state,
+            dateActive.compareTo($orderDate) <= 0,
+            dateActive.compareTo($tax.dateActive) > 0
+        )
+    then
+        $order.setStateSalesTax($taxableAmount * $rate);
+        update($order);
+end
+
+rule "add local sales tax"
+    no-loop
+    when
+        $order: Order(
+            $state: customerState,
+            $city: customerCity,
+            $orderDate: date,
+            $taxableAmount: taxableAmount,
+            $currentTaxAmount: localSalesTax
+        )
+        $tax: LocalTaxRate(
+            state == $state,
+            city == $city,
+            dateActive.compareTo($orderDate) <= 0,
+            rate != ($currentTaxAmount / $taxableAmount),
+            $rate: rate
+        )
+        not LocalTaxRate(
+            state == $state,
+            city == $city,
+            dateActive.compareTo($orderDate) <= 0,
+            dateActive.compareTo($tax.dateActive) > 0
+        )
+    then
+        $order.setLocalSalesTax($taxableAmount * $rate);
+        update($order);
+end
