@@ -1,0 +1,60 @@
+13:21:55.897 [Test worker] INFO  o.d.c.k.b.impl.ClasspathKieProject - Found kmodule: file:/Users/cedric/src/spantree/drools-examples/build/resources/main/META-INF/kmodule.xml
+13:21:55.899 [Test worker] DEBUG o.d.c.k.b.impl.ClasspathKieProject - KieModule URL type=file url=/Users/cedric/src/spantree/drools-examples/build/resources/main
+13:21:56.015 [Test worker] WARN  o.d.c.k.b.impl.ClasspathKieProject - Unable to find pom.properties in /Users/cedric/src/spantree/drools-examples/build/resources/main
+13:21:56.015 [Test worker] WARN  o.d.c.k.b.impl.ClasspathKieProject - As folder project tried to fall back to pom.xml, but could not find one for null
+13:21:56.015 [Test worker] WARN  o.d.c.k.b.impl.ClasspathKieProject - Unable to load pom.properties from/Users/cedric/src/spantree/drools-examples/build/resources/main
+13:21:56.015 [Test worker] WARN  o.d.c.k.b.impl.ClasspathKieProject - Cannot find maven pom properties for this project. Using the container's default ReleaseId
+13:21:56.016 [Test worker] DEBUG o.d.c.k.b.impl.ClasspathKieProject - Discovered classpath module org.default:artifact:1.0.0-SNAPSHOT
+13:21:56.018 [Test worker] INFO  o.d.c.k.b.impl.KieRepositoryImpl - KieModule was added: FileKieModule[releaseId=org.default:artifact:1.0.0-SNAPSHOT,file=/Users/cedric/src/spantree/drools-examples/build/resources/main]
+13:21:57.089 [Test worker] DEBUG o.drools.core.impl.KnowledgeBaseImpl - Starting Engine in PHREAK mode
+13:21:57.231 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - Adding 19 products
+13:21:57.305 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - Adding 3 tax rates
+13:21:57.315 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - Placing order 567 on 2016-01-14T08:09 for Cedric Hurst in Chicago, IL
+13:21:57.318 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - ...Adding items...
+13:21:57.319 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - .. OrderItem{order.id=567, product=Product{id='poodle', type=DOG, description='Poodle', price=1200.0}, quantity=1}
+13:21:57.426 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - .. OrderItem{order.id=567, product=Product{id='clownfish', type=FISH, description='Clown Fish', price=16.0}, quantity=2}
+13:21:57.527 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - .. OrderItem{order.id=567, product=Product{id='goldfish', type=FISH, description='Goldfish', price=5.0}, quantity=10}
+13:21:57.630 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - .. OrderItem{order.id=567, product=Product{id='cubeaqua', type=FISH_TANK, description='Tetra Cube Aquarium', price=38.24}, quantity=1}
+13:21:59.737 [Test worker] INFO  n.s.e.drools.petstore.PetStoreSpec - Firing all rules
+13:21:59.809 [Test worker] INFO  PetStoreKS - Adding new discount OrderDiscount{order.id=567, items=[OrderItem{order.id=567, product=Product{id='buff_lamb_rice', type=DOG_FOOD, description='Blue Buffalo Lamb & Brown Rice', price=44.09}, quantity=1}], percentage=1.0, amount=null, reason='add free bag of dog food with purchase of new dog'}
+13:21:59.819 [Test worker] INFO  PetStoreKS - Adding discount to order OrderDiscount{order.id=567, items=[OrderItem{order.id=567, product=Product{id='buff_lamb_rice', type=DOG_FOOD, description='Blue Buffalo Lamb & Brown Rice', price=44.09}, quantity=1}], percentage=1.0, amount=null, reason='add free bag of dog food with purchase of new dog'}
+13:21:59.862 [Test worker] INFO  PetStoreKS - Adding discount to order OrderDiscount{order.id=567, items=[OrderItem{order.id=567, product=Product{id='buff_lamb_rice', type=DOG_FOOD, description='Blue Buffalo Lamb & Brown Rice', price=44.09}, quantity=1}], percentage=1.0, amount=44.09, reason='add free bag of dog food with purchase of new dog'}
+13:21:59.876 [Test worker] INFO  PetStoreKS - Adding discount to order OrderDiscount{order.id=567, items=[OrderItem{order.id=567, product=Product{id='goldfish', type=FISH, description='Goldfish', price=5.0}, quantity=10}], percentage=1.0, amount=null, reason='buy two fish get one fish free'}
+13:21:59.877 [Test worker] INFO  PetStoreKS - Adding discount to order OrderDiscount{order.id=567, items=[OrderItem{order.id=567, product=Product{id='goldfish', type=FISH, description='Goldfish', price=5.0}, quantity=10}], percentage=1.0, amount=5.0, reason='buy two fish get one fish free'}
+13:21:59.884 [Test worker] INFO  PetStoreKS - Adding discount to order OrderDiscount{order.id=567, items=[OrderItem{order.id=567, product=Product{id='cubeaqua', type=FISH_TANK, description='Tetra Cube Aquarium', price=38.24}, quantity=1}], percentage=0.5, amount=null, reason='buy ten fish get a tank half off'}
+13:21:59.884 [Test worker] INFO  PetStoreKS - Adding discount to order OrderDiscount{order.id=567, items=[OrderItem{order.id=567, product=Product{id='cubeaqua', type=FISH_TANK, description='Tetra Cube Aquarium', price=38.24}, quantity=1}], percentage=0.5, amount=19.12, reason='buy ten fish get a tank half off'}
+
+********************************************************************************
+Order 567
+Customer Name: Cedric Hurst
+Customer City: Chicago, IL
+********************************************************************************
+
+Item                                              Type          Price     Quantity
+--------------------------------------------------------------------------------
+Goldfish                                          FISH          $5.00     10
+Clown Fish                                        FISH          $16.00    2
+Blue Buffalo Lamb & Brown Rice                    DOG_FOOD      $44.09    1
+Poodle                                            DOG           $1,200.00 1
+Tetra Cube Aquarium                               FISH_TANK     $38.24    1
+--------------------------------------------------------------------------------
+Subtotal                                                        $1,364.33
+
+Notes
+--------------------------------------------------------------------------------
+Order contains both saltwater and freshwater fish, house in separate tanks.
+
+Discount                                                        Amount
+--------------------------------------------------------------------------------
+add free bag of dog food with purchase of new dog               $44.09
+buy ten fish get a tank half off                                $19.12
+buy two fish get one fish free                                  $5.00
+--------------------------------------------------------------------------------
+Total Discount                                                  $68.21
+
+********************************************************************************
+Taxable Amount                                                  $1,296.12
+State Sales Tax                                                 $81.01
+Local Sales Tax                                                 $51.84
+********************************************************************************
+Total Balance                                                   $1,428.97
