@@ -46,4 +46,4 @@ After adding the order to the rules engine, the following information is applied
 * Apply a state sales tax of 6.25%.
 * Apply a local sales tax (at the new higher Chicago rate) of 4%.
 
-[![asciicast](https://asciinema.org/a/3lp2vh750kz3lyfq5iqp8g3xt.png)](https://asciinema.org/a/3lp2vh750kz3lyfq5iqp8g3xt)
+[![asciicast](https://asciinema.org/a/6xwqsee18ls0kj1lxh5bkpv2t)](https://asciinema.org/a/6xwqsee18ls0kj1lxh5bkpv2t)
